@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Typescript TodoList</title>
+    <link rel="stylesheet" href="/public/Style/Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  </head>
+  <body  class="w-full h-full bg-slate-700 text-slate-100">
+    <header class="flex items-center justify-center w-full h-40">
+      <h1 class="text-3xl">Simple TodoList with Typescript and Tailwind</h1>
+    </header>
+    <section class="flex flex-col w-full h-ful">
+      <div class="flex justify-between w-1/2 mx-auto mb-3">
+        <form action="#">
+        <input type="text" name="inputNotesTask" id="getInputTask" class="px-2 rounded-l-sm bg-slate-500 focus:outline-slate-500 focus:border-none" placeholder="type a new Task">
+          <button class="px-2 rounded-r-sm bg-slate-500 addTodoBtn">Add</button>
+      </form>
+       <div class="flex items-center justify-around h-8 w-28">
+          <span class="w-6 h-6 text-center bg-blue-500 rounded-full text-slate-100 badge badge-all" title="All">0</span>  
+          <span class="w-6 h-6 text-center bg-green-500 rounded-full text-slate-100 badge badge-Completed" title="Completed">0</span>  
+          <span class="w-6 h-6 text-center rounded-full bg-rose-500 text-slate-100 badge badge-UnCompleted" title="UnCompleted">0</span>  
+          </div>
+          <select name="filterTodos" id="filterTodos" class="rounded cursor-pointer h-7 bg-slate-500 focus:outline-slate-500 focus:border-none">
+            <option value="All">All</option>
+            <option value="Completed">Completed</option>
+            <option value="UnCompleted">UnCompleted</option>
+          </select>
+      </div>
+      <div class="w-1/2 h-auto mx-auto mt-6 todos-Wrapper">
+        <ul class="flex flex-col items-center justify-around w-full todo-list"></ul>
+      </div>
+    </section>
+    <script type="module" src="/public/js/index.js"></script>
+  </body>
+</html>
