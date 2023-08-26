@@ -9,7 +9,15 @@ interface Todos {
 	date: string;
 	isDone: boolean;
 }
+type Edit = {
+	isEdit: boolean;
+	editId: number | null;
+};
 let filteredValue: string = "All";
+const EditItem: Edit = {
+	isEdit: false,
+	editId: null,
+};
 // save Todos on localStorage
 function saveToLocalStorage(Todos: Todos[]): void {
 	localStorage.setItem("Todos", JSON.stringify(Todos));
@@ -19,8 +27,8 @@ function getOfLocalStorage(): Todos[] {
 	return JSON.parse(localStorage.getItem("Todos") as string) || [];
 }
 //add new Todo logic
-function addTodo(e: Event): void {
-	e.preventDefault();
+function addTodo(): void {
+	// e.preventDefault();
 	if (!inputTodo.value) return;
 	const Todo: Todos = {
 		id: Date.now(),
@@ -31,10 +39,6 @@ function addTodo(e: Event): void {
 	const savedLocal = getOfLocalStorage() || [];
 	savedLocal.push(Todo);
 	saveToLocalStorage(savedLocal);
-	createTodoElement(savedLocal);
-	inputTodo.value = "";
-	filterByStatus(filteredValue);
-	todalTodoCounter();
 }
 // create Todo and append to todolist
 function createTodoElement(AllTodos: Todos[]): void {
@@ -78,9 +82,45 @@ function createTodoElement(AllTodos: Todos[]): void {
 		editBtns.forEach((Btn) => {
 			Btn.addEventListener("click", (e) => {
 				const id = Number((e.target as HTMLButtonElement).dataset.editId);
+				const setInputValu = getOfLocalStorage().find((todo) => todo.id === id);
+				inputTodo.value = setInputValu?.subject as string;
+				EditItem.isEdit = true;
+				EditItem.editId = id;
+				addTodoBtn.innerText = "Edit";
 			});
 		});
 	}
+}
+//check Todo Status
+function checkTodoStatus(e: Event): void {
+	e.preventDefault();
+	let BtnLabel = (e.target as HTMLButtonElement).innerText;
+	filterByStatus(filteredValue);
+	switch (BtnLabel) {
+		case "Add": {
+			addTodo();
+			break;
+		}
+		case "Edit": {
+			if (!EditItem.editId) return;
+			editTodo(EditItem.editId, inputTodo.value);
+			EditItem.isEdit = false;
+			addTodoBtn.innerText = "Add";
+			break;
+		}
+	}
+	createTodoElement(getOfLocalStorage());
+	checkBoxStatus();
+	filterByStatus(filteredValue);
+	inputTodo.value = "";
+}
+//Edit Todo
+function editTodo(id: number, value: string): void {
+	const cloneTodos = [...getOfLocalStorage()];
+	const findIndex = cloneTodos.findIndex((todo) => todo.id === id);
+	cloneTodos[findIndex].subject = value;
+	saveToLocalStorage(cloneTodos);
+	filterByStatus(filteredValue);
 }
 //Remove Todo
 function removeTodo(id: number): void {
@@ -120,12 +160,9 @@ function filterByStatus(filteredValue: string): void {
 		case "Completed":
 			createTodoElement(getOfLocalStorage().filter((todo) => todo.isDone));
 			break;
-
 		case "UnCompleted":
 			createTodoElement(getOfLocalStorage().filter((todo) => !todo.isDone));
 			break;
-		// default:
-		// 	createTodoElement(getOfLocalStorage());
 	}
 	checkBoxStatus();
 	todalTodoCounter();
@@ -148,8 +185,8 @@ function todalTodoCounter(): void {
 		}
 	});
 }
-//add new Todo Handler
-addTodoBtn.addEventListener("click", addTodo);
+//add or edite Todo Handler
+addTodoBtn.addEventListener("click", checkTodoStatus);
 // Filter Todos Hanlder
 filterTodos.addEventListener("change", (e) => {
 	e.preventDefault();

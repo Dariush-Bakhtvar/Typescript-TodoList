@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.removeBtn i {
+button i {
 	pointer-events: none;
 }
